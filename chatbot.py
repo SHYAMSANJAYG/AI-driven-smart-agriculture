@@ -463,7 +463,22 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     st.markdown("### 📂 Land Data")
-    uploaded_file = st.file_uploader("Upload GeoJSON Plot File", type=["geojson"])
+   # Add this as an alternative to the file uploader
+input_method = st.radio("Choose Input Method", ["File Upload", "Paste JSON Text"])
+# From your screenshot:
+if input_method == "File Upload":
+    uploaded_file = st.file_uploader("Upload GeoJSON", type=["geojson", "json", "txt"])
+else:
+    json_text = st.text_area("Paste GeoJSON Content Here")
+    if json_text:
+        import io
+        uploaded_file = io.StringIO(json_text)
+
+# The rest of your map code should now start with:
+if uploaded_file:
+    # This part remains the same for both input methods!
+    data = json.load(uploaded_file)
+    # ... rest of the visualization logic
 
     st.markdown("---")
     st.markdown("### 🌦️ Weather API")
